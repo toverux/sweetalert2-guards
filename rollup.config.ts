@@ -12,7 +12,7 @@ export default {
         { file: pkg.module, format: 'es' }
     ],
     sourcemap: true,
-    external: [],
+    external: ['sweetalert2'],
     watch: { include: 'src/**', },
     plugins: [
         typescript(),

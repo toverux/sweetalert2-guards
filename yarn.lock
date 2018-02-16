@@ -2705,6 +2705,10 @@ supports-color@^5.2.0:
   dependencies:
     has-flag "^3.0.0"
 
+sweetalert2@^7.0.0:
+  version "7.12.3"
+  resolved "https://registry.yarnpkg.com/sweetalert2/-/sweetalert2-7.12.3.tgz#a6de2f9c935ac868918570f2d9d8739458c70e39"
+
 symbol-tree@^3.2.2:
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/symbol-tree/-/symbol-tree-3.2.2.tgz#ae27db38f660a7ae2e1c3b7d1bc290819b8519e6"

@@ -13,6 +13,7 @@ export default {
     ],
     sourcemap: true,
     external: ['sweetalert2'],
+    globals: { sweetalert2: 'swal' },
     watch: { include: 'src/**', },
     plugins: [
         typescript(),

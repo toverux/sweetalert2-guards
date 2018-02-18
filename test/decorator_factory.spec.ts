@@ -1,5 +1,5 @@
 import { makeDecorator, normalizeDecoratorArguments } from '../src/decorator_factory';
-import { SweetAlertOptions } from '../src/decorator_runtime';
+import { GuardOptions } from '../src/decorator_options';
 
 describe('decorator_factory', () => {
     describe(normalizeDecoratorArguments.name, () => {
@@ -27,7 +27,7 @@ describe('decorator_factory', () => {
         });
 
         it('should merge user options with decorator\'s defaults', () => {
-            const defaults: SweetAlertOptions = { title: 'decoratorTitle', type: 'info' };
+            const defaults: GuardOptions = { title: 'decoratorTitle', type: 'info' };
 
             const options = normalizeDecoratorArguments(['title', 'text'], defaults)();
             const objOptions = normalizeDecoratorArguments([{ title: 'title' }], defaults)();

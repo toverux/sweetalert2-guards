@@ -1,6 +1,5 @@
-import swal, { SweetAlertOptions } from 'sweetalert2';
-
-export { SweetAlertOptions };
+import swal, { SweetAlertDismissReason } from 'sweetalert2';
+import { GuardOptions, onDismiss } from './decorator_options';
 
 export type VariadicThunk<TResult = any> = (...args: any[]) => TResult;
 
@@ -8,14 +7,19 @@ export type MaybeVariadicThunk<T = any> = T | VariadicThunk<T>;
 
 export function createGuardMethod(
     wrappedMethod: VariadicThunk,
-    optionsGetter: VariadicThunk<SweetAlertOptions>): VariadicThunk<Promise<any>> {
+    optionsGetter: VariadicThunk<GuardOptions>): VariadicThunk<Promise<any>> {
 
     return async function(this: any, ...args: any[]) {
-        const options = optionsGetter(...args);
+        //=> Build alert options
+        const options: GuardOptions = {
+            //=> Default Guard options
+            [onDismiss]: defaultOnDismissHandler,
 
-        const guardOptions: SweetAlertOptions = {
-            ...options,
+            //=> Proposed default SweetAlert options
             showLoaderOnConfirm: true,
+
+            //=> Merge with consumer options
+            ...optionsGetter(...args),
 
             // using an arrow function to preserve current `this` scope
             // otherwise, `this` becomes the options object itself
@@ -24,12 +28,15 @@ export function createGuardMethod(
             }
         };
 
-        const { value, dismiss } = await swal(guardOptions);
+        //=> Show the alert
+        const { value, dismiss } = await swal(options);
 
-        if (dismiss) {
-            throw new Error(`SweetAlert2 Guard didn't execute method: modal was dismissed (${dismiss})`);
-        }
-
-        return value;
+        return dismiss
+            ? options[onDismiss]!(dismiss)
+            : value;
     };
+}
+
+function defaultOnDismissHandler(dismiss: SweetAlertDismissReason): void {
+    throw new Error(`SweetAlert2 Guard didn't execute method: modal was dismissed (${dismiss})`);
 }

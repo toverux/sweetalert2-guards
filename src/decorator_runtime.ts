@@ -1,5 +1,5 @@
 import swal, { SweetAlertDismissReason } from 'sweetalert2';
-import { GuardOptions, onDismiss } from './decorator_options';
+import { GuardOptions, onDismiss, onInvoke } from './decorator_options';
 
 export type VariadicThunk<TResult = any> = (...args: any[]) => TResult;
 
@@ -13,7 +13,8 @@ export function createGuardMethod(
         //=> Build alert options
         const options: GuardOptions = {
             //=> Default Guard options
-            [onDismiss]: defaultOnDismissHandler,
+            [onInvoke]: onInvokePassOriginalArguments,
+            [onDismiss]: onDismissReject,
 
             //=> Proposed default SweetAlert options
             showLoaderOnConfirm: true,
@@ -21,10 +22,18 @@ export function createGuardMethod(
             //=> Merge with consumer options
             ...optionsGetter(...args),
 
+            //=> Tuning preConfirm to run our wrapped method
             // using an arrow function to preserve current `this` scope
             // otherwise, `this` becomes the options object itself
-            preConfirm: () => {
-                return wrappedMethod.apply(this, args);
+            // tslint:disable-next-line:no-shadowed-variable
+            preConfirm: async (value) => {
+                //=> Call wrapped method
+                const result = await wrappedMethod.apply(this, options[onInvoke]!(args, value));
+
+                // Result can be undefined/false-ish for void/Promise<void> wrapped methods,
+                // and SweetAlert will take `value` when preConfirm's returns nothing.
+                // To avoid that and preserve our false-ish value, we wrap it into an object.
+                return { result };
             }
         };
 
@@ -33,10 +42,14 @@ export function createGuardMethod(
 
         return dismiss
             ? options[onDismiss]!(dismiss)
-            : value;
+            : value.result;
     };
 }
 
-function defaultOnDismissHandler(dismiss: SweetAlertDismissReason): void {
+function onInvokePassOriginalArguments(originalArguments: any[]): any[] {
+    return originalArguments;
+}
+
+function onDismissReject(dismiss: SweetAlertDismissReason): void {
     throw new Error(`SweetAlert2 Guard didn't execute method: modal was dismissed (${dismiss})`);
 }

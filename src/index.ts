@@ -1,3 +1,1 @@
-export default class DummyClass {
-
-}
+export * from './sweetalert_decorator';

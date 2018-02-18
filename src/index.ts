@@ -1,1 +1,1 @@
-export * from './sweetalert_decorator';
+export * from './alert_decorator';

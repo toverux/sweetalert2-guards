@@ -1,11 +1,11 @@
 {
-  "name": "sweetalert2-decorators",
+  "name": "@sweetalert2/guards",
   "version": "0.0.0",
   "description": "",
   "keywords": [],
-  "main": "dist/sweetalert2-decorators.umd.js",
-  "module": "dist/sweetalert2-decorators.es5.js",
-  "typings": "dist/types/sweetalert2-decorators.d.ts",
+  "main": "dist/sweetalert2-guards.umd.js",
+  "module": "dist/sweetalert2-guards.es5.js",
+  "typings": "dist/types/sweetalert2-guards.d.ts",
   "files": [
     "dist"
   ],

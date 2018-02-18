@@ -4,7 +4,7 @@ describe('index', () => {
     describe('Public exports', () => {
         it('should export expected symbols', () => {
             const keys = Object.keys(index);
-            expect(keys).toEqual(['SweetAlert']);
+            expect(keys).toEqual(['Alert']);
         });
     });
 });

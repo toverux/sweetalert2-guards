@@ -1,1 +1,1 @@
-# SweetAlert2 Decorators
+# SweetAlert2 Guards

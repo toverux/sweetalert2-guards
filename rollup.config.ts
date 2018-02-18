@@ -16,7 +16,7 @@ export default {
     globals: { sweetalert2: 'swal' },
     watch: { include: 'src/**', },
     plugins: [
-        typescript(),
+        typescript({ useTsconfigDeclarationDir: true }),
         commonjs(),
         resolve(),
         sourceMaps()

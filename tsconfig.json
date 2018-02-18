@@ -11,7 +11,7 @@
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "declarationDir": "dist/types",
+    "declarationDir": "dist/lib",
     "outDir": "dist/es"
   },
   "include": ["src"]

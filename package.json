@@ -5,7 +5,7 @@
   "keywords": [],
   "main": "dist/sweetalert2-guards.umd.js",
   "module": "dist/sweetalert2-guards.es5.js",
-  "typings": "dist/types/sweetalert2-guards.d.ts",
+  "types": "dist/lib/index.d.ts",
   "files": [
     "dist"
   ],

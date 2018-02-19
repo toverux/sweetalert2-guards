@@ -7,7 +7,9 @@ export function Alert(
     text?: string,
     typeOrOptions?: string | MaybeVariadicThunk<GuardOptions>): MethodDecorator {
 
-    const options = normalizeDecoratorArguments(arguments);
+    const options = normalizeDecoratorArguments(arguments, {
+        showLoaderOnConfirm: true
+    });
 
     return makeDecorator(Alert, options);
 }

@@ -17,9 +17,6 @@ export function createGuardMethod(
             [onInvoke]: onInvokePassOriginalArguments,
             [onError]: ErrorHandler.reThrow,
 
-            //=> Proposed default SweetAlert options
-            showLoaderOnConfirm: true,
-
             //=> Merge with consumer options
             ...optionsGetter(...args),
 

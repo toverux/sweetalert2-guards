@@ -9,7 +9,8 @@ export function Confirm(
 
     const options = normalizeDecoratorArguments(arguments, {
         type: 'question',
-        showCancelButton: true
+        showCancelButton: true,
+        showLoaderOnConfirm: true
     });
 
     return makeDecorator(Confirm, options);

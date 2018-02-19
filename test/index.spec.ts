@@ -5,6 +5,7 @@ describe('index', () => {
         it('should export expected symbols', () => {
             const keys = Object.keys(index);
             expect(keys).toEqual([
+                'ErrorHandler',
                 'guard',
                 'Alert', 'Confirm'
             ]);

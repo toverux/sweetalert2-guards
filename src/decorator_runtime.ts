@@ -1,5 +1,5 @@
 import swal, { SweetAlertDismissReason } from 'sweetalert2';
-import { GuardOptions, onDismiss, onInvoke } from './decorator_options';
+import { GuardOptions, onDismiss, onError, onInvoke } from './decorator_options';
 
 export type VariadicThunk<TResult = any> = (...args: any[]) => TResult;
 
@@ -13,8 +13,9 @@ export function createGuardMethod(
         //=> Build alert options
         const options: GuardOptions = {
             //=> Default Guard options
-            [onInvoke]: onInvokePassOriginalArguments,
             [onDismiss]: onDismissReject,
+            [onInvoke]: onInvokePassOriginalArguments,
+            [onError]: ErrorHandler.reThrow,
 
             //=> Proposed default SweetAlert options
             showLoaderOnConfirm: true,
@@ -27,13 +28,19 @@ export function createGuardMethod(
             // otherwise, `this` becomes the options object itself
             // tslint:disable-next-line:no-shadowed-variable
             preConfirm: async (value) => {
-                //=> Call wrapped method
-                const result = await wrappedMethod.apply(this, options[onInvoke]!(args, value));
+                try {
+                    //=> Call wrapped method
+                    const result = await wrappedMethod.apply(this, options[onInvoke]!(args, value));
 
-                // Result can be undefined/false-ish for void/Promise<void> wrapped methods,
-                // and SweetAlert will take `value` when preConfirm's returns nothing.
-                // To avoid that and preserve our false-ish value, we wrap it into an object.
-                return { result };
+                    // Result can be undefined/false-ish for void/Promise<void> wrapped methods,
+                    // and SweetAlert will take `value` when preConfirm's returns nothing.
+                    // To avoid that and preserve our false-ish value, we wrap it into an object.
+                    return { result };
+                } catch (err) {
+                    const result = options[onError]!(err);
+
+                    return { result };
+                }
             }
         };
 
@@ -44,6 +51,18 @@ export function createGuardMethod(
             ? options[onDismiss]!(dismiss)
             : value.result;
     };
+}
+
+export class ErrorHandler {
+    public static reThrow(err: any): void {
+        throw err;
+    }
+
+    public static showAsValidationError(err: any): void {
+        const message = err instanceof Error ? err.message : err.toString();
+
+        swal.showValidationError(message);
+    }
 }
 
 function onInvokePassOriginalArguments(originalArguments: any[]): any[] {

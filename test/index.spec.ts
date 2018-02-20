@@ -7,7 +7,7 @@ describe('index', () => {
             expect(keys).toEqual([
                 'ErrorStrategy',
                 'guard',
-                'Alert', 'Confirm'
+                'Alert', 'Confirm', 'Loader'
             ]);
         });
     });

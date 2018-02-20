@@ -1,3 +1,4 @@
+import swal from 'sweetalert2';
 import { makeDecorator, normalizeDecoratorArguments } from './decorator_factory';
 import { GuardOptions } from './decorator_options';
 import { MaybeVariadicThunk } from './decorator_runtime';
@@ -8,7 +9,9 @@ export function Alert(
     typeOrOptions?: string | MaybeVariadicThunk<GuardOptions>): MethodDecorator {
 
     const options = normalizeDecoratorArguments(arguments, {
-        showLoaderOnConfirm: true
+        showLoaderOnConfirm: true,
+        allowOutsideClick: () => !swal.isLoading(),
+        allowEscapeKey: () => !swal.isLoading()
     });
 
     return makeDecorator(Alert, options);

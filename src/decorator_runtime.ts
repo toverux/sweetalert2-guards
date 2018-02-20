@@ -55,7 +55,7 @@ export function createGuardMethod(
                 //=> Call success handler
                 await options[onSuccess]!(value.result);
                 //=> Return wrapped method result
-                return value;
+                return value.result;
             }
         } catch (err) {
             //=> Call error handler
